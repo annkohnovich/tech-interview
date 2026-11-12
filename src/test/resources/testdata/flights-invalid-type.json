@@ -1,0 +1,13 @@
+[
+  {
+    "flightId": "FL-4001",
+    "flightNumber": "LH1234",
+    "airline": "Lufthansa",
+    "departureAirport": "FRA",
+    "arrivalAirport": "LHR",
+    "departureTime": "2026-09-08T06:15:00",
+    "arrivalTime": "2026-09-08T07:05:00",
+    "delayMinutes": "not-a-number",
+    "status": "LANDED"
+  }
+]

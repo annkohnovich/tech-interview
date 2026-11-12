@@ -1,0 +1,12 @@
+[
+  {
+    "flightId": "FL-2001",
+    "flightNumber": "LH1234",
+    "departureAirport": "FRA",
+    "arrivalAirport": "LHR",
+    "departureTime": "2026-09-08T06:15:00",
+    "arrivalTime": "2026-09-08T07:05:00",
+    "delayMinutes": 0,
+    "status": "LANDED"
+  }
+]

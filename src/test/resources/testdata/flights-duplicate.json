@@ -1,0 +1,35 @@
+[
+  {
+    "flightId": "FL-3001",
+    "flightNumber": "LH1234",
+    "airline": "Lufthansa",
+    "departureAirport": "FRA",
+    "arrivalAirport": "LHR",
+    "departureTime": "2026-09-08T06:15:00",
+    "arrivalTime": "2026-09-08T07:05:00",
+    "delayMinutes": 0,
+    "status": "LANDED"
+  },
+  {
+    "flightId": "FL-3002",
+    "flightNumber": "BA0917",
+    "airline": "British Airways",
+    "departureAirport": "LHR",
+    "arrivalAirport": "FRA",
+    "departureTime": "2026-09-08T08:40:00",
+    "arrivalTime": "2026-09-08T11:20:00",
+    "delayMinutes": 25,
+    "status": "DELAYED"
+  },
+  {
+    "flightId": "FL-3001",
+    "flightNumber": "LH9999",
+    "airline": "Lufthansa",
+    "departureAirport": "MUC",
+    "arrivalAirport": "CDG",
+    "departureTime": "2026-09-08T20:00:00",
+    "arrivalTime": "2026-09-08T21:45:00",
+    "delayMinutes": 15,
+    "status": "SCHEDULED"
+  }
+]

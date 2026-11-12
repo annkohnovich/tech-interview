@@ -1,0 +1,70 @@
+# Same pipeline as the Jenkinsfile, for GitHub Actions.
+# Each job is a quality gate; `needs:` makes a job wait for (and require) the previous one.
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  unit-and-contract:
+    name: Unit + contract tests (consumer)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - run: mvn -B test
+      - name: Hand the contract to the provider job
+        uses: actions/upload-artifact@v4
+        with:
+          name: pacts
+          path: pacts/
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-reports
+          path: target/surefire-reports/
+
+  provider-verification:
+    name: Contract verification (provider)
+    needs: unit-and-contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - uses: actions/download-artifact@v4
+        with:
+          name: pacts
+          path: pacts/
+      - run: mvn -B test
+        working-directory: airport-service
+
+  integration-and-coverage:
+    name: Integration tests + coverage gate
+    needs: provider-verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: maven
+      - run: mvn -B verify
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            target/failsafe-reports/
+            target/site/jacoco/
+            target/allure-results/

@@ -1,0 +1,35 @@
+[
+  {
+    "flightId": "FL-5001",
+    "flightNumber": "LH1234",
+    "airline": "Lufthansa",
+    "departureAirport": "FRA",
+    "arrivalAirport": "LHR",
+    "departureTime": "2026-09-08T06:15:00",
+    "arrivalTime": "2026-09-08T07:05:00",
+    "delayMinutes": 0,
+    "status": "LANDED"
+  },
+  {
+    "flightId": "FL-5002",
+    "flightNumber": "BA0917",
+    "airline": "British Airways",
+    "departureAirport": "LHR",
+    "arrivalAirport": "LHR",
+    "departureTime": "2026-09-08T08:40:00",
+    "arrivalTime": "2026-09-08T11:20:00",
+    "delayMinutes": -5,
+    "status": "DELAYED"
+  },
+  {
+    "flightId": "FL-5003",
+    "flightNumber": "KL1765",
+    "airline": "KLM",
+    "departureAirport": "AMS",
+    "arrivalAirport": "BCN",
+    "departureTime": "2026-09-08T09:55:00",
+    "arrivalTime": "2026-09-08T12:10:00",
+    "delayMinutes": 0,
+    "status": "DEPARTED"
+  }
+]
