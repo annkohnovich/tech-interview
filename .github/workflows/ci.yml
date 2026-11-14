@@ -100,12 +100,14 @@ jobs:
           echo "Deploying build ${GITHUB_SHA::7} to QA."
           echo "Simulated: a real job would copy this jar/image to the QA server and restart it."
 
-  ui-tests-qa:
-    name: UI tests on QA
+  smoke-tests-qa:
+    name: Smoke tests on QA
     needs: deploy-qa
     # Runs a workflow that lives in ANOTHER repo, as a job of this pipeline.
-    # If the UI tests fail, this pipeline goes red.
+    # If the smoke tests fail, this pipeline goes red = the deploy is rejected.
+    # Full regression is NOT run here - it runs nightly on a schedule in playwright-practice.
     uses: annkohnovich/playwright-practice/.github/workflows/ui-tests.yml@main
     with:
+      suite: smoke
       environment: qa
       browser: chromium
