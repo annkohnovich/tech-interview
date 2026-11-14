@@ -1,10 +1,13 @@
-# Same pipeline as the Jenkinsfile, for GitHub Actions.
+# CI + CD pipeline. Jobs 1-3 match the Jenkinsfile; jobs 4-5 (deploy + UI tests) are GitHub-only.
 # Each job is a quality gate; `needs:` makes a job wait for (and require) the previous one.
 
 name: CI
 
+# CI  (jobs 1-3): every PR and every push to main.
+# CD  (jobs 4-5): only after a merge to main - a PR must never deploy anything.
 on:
   push:
+    branches: [main]
   pull_request:
 
 jobs:
@@ -68,3 +71,43 @@ jobs:
             target/failsafe-reports/
             target/site/jacoco/
             target/allure-results/
+      # "Build once, deploy many": the jar that passed every gate is the one we deploy.
+      - name: Save the tested build
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/flight-ingestion-*.jar
+
+  # ---------------- Continuous Delivery ----------------
+
+  deploy-qa:
+    name: Deploy to QA (simulated)
+    needs: integration-and-coverage
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    # A GitHub Environment: shows up under Deployments, can hold QA-only
+    # variables/secrets, and can require a manual approval before this job runs.
+    environment:
+      name: qa
+      url: https://www.saucedemo.com
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+      - name: Deploy
+        run: |
+          ls -l *.jar
+          echo "Deploying build ${GITHUB_SHA::7} to QA."
+          echo "Simulated: a real job would copy this jar/image to the QA server and restart it."
+
+  smoke-tests-qa:
+    name: Smoke tests on QA
+    needs: deploy-qa
+    # Runs a workflow that lives in ANOTHER repo, as a job of this pipeline.
+    # If the smoke tests fail, this pipeline goes red = the deploy is rejected.
+    # Full regression is NOT run here - it runs nightly on a schedule in playwright-practice.
+    uses: annkohnovich/playwright-practice/.github/workflows/ui-tests.yml@main
+    with:
+      suite: smoke
+      environment: qa
+      browser: chromium
